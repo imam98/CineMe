@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:id="@+id/group_movie"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_explore"
+            android:icon="@drawable/ic_search"
+            android:title="@string/explore" />
+        <item
+            android:id="@+id/nav_now_playing"
+            android:icon="@drawable/ic_play_circle"
+            android:title="@string/now_playing" />
+        <item
+            android:id="@+id/nav_coming_soon"
+            android:icon="@drawable/ic_clock"
+            android:title="@string/coming_soon" />
+
+    </group>
+    <group
+        android:id="@+id/group_user"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_favorite"
+            android:icon="@drawable/ic_favorite"
+            android:title="@string/my_favorites" />
+        <item
+            android:id="@+id/nav_planned"
+            android:icon="@drawable/ic_calendar"
+            android:title="@string/planned_to_watch" />
+
+    </group>
+
+</menu>
