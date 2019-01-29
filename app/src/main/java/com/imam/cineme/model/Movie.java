@@ -173,7 +173,7 @@ public class Movie implements Parcelable {
         return rate;
     }
 
-    public void setRate(float rate) {
+    public void setRate(double rate) {
         this.rate = rate;
     }
 
