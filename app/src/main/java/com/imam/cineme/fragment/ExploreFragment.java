@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.imam.cineme.R;
 import com.imam.cineme.adapter.MovieGridAdapter;
 import com.imam.cineme.model.Movie;
@@ -34,6 +35,7 @@ public class ExploreFragment extends Fragment
     @BindView(R.id.lst_movie) RecyclerView lstMovie;
     @BindView(R.id.txt_search) EditText txtSearch;
     @BindView(R.id.btn_search) ImageButton btnSearch;
+    @BindView(R.id.shimmer_container) ShimmerFrameLayout shimmerContainer;
     private Unbinder unbinder;
 
     public ExploreFragment() {
@@ -58,6 +60,9 @@ public class ExploreFragment extends Fragment
 
     @Override
     public Loader<ArrayList<Movie>> onCreateLoader(int i, Bundle bundle) {
+        shimmerContainer.startShimmer();
+        shimmerContainer.setVisibility(View.VISIBLE);
+
         return new MovieListLoader(getActivity(), API.POPULAR);
     }
 
@@ -67,6 +72,9 @@ public class ExploreFragment extends Fragment
         lstMovie.setLayoutManager(new GridLayoutManager(getActivity(), 2,
                 GridLayoutManager.VERTICAL, false));
         lstMovie.setAdapter(adapter);
+
+        shimmerContainer.setVisibility(View.GONE);
+        shimmerContainer.stopShimmer();
     }
 
     @Override
