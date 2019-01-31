@@ -14,5 +14,5 @@ public class API {
     public static final String NOW_PLAYING = "now_playing";
     public static final String UPCOMING = "upcoming";
     public static final String POPULAR = "popular";
-    public static final String QUERY = "query";
+    public static final String QUERY = "&query=";
 }
