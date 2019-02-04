@@ -2,6 +2,7 @@ package com.imam.cineme.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -20,11 +21,14 @@ import android.widget.TextView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.imam.cineme.R;
+import com.imam.cineme.activity.MovieDetailActivity;
 import com.imam.cineme.adapter.MovieGridAdapter;
 import com.imam.cineme.model.Movie;
 import com.imam.cineme.util.API;
 import com.imam.cineme.util.MovieListLoader;
+import com.imam.cineme.util.RecyclerViewOnItemClickListener;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -40,6 +44,7 @@ public class ExploreFragment extends Fragment
     @BindView(R.id.txt_search) EditText txtSearch;
     @BindView(R.id.btn_search) ImageButton btnSearch;
     @BindView(R.id.shimmer_container) ShimmerFrameLayout shimmerContainer;
+    private ArrayList<Movie> dataList;
     private Unbinder unbinder;
 
     public ExploreFragment() {
@@ -102,10 +107,20 @@ public class ExploreFragment extends Fragment
     }
 
     @Override
-    public void onLoadFinished(Loader<ArrayList<Movie>> loader, ArrayList<Movie> movies) {
-        MovieGridAdapter adapter = new MovieGridAdapter(getActivity(), movies);
+    public void onLoadFinished(Loader<ArrayList<Movie>> loader, final ArrayList<Movie> movies) {
+        dataList = movies;
         lstMovie.setLayoutManager(new GridLayoutManager(getActivity(), 2,
                 GridLayoutManager.VERTICAL, false));
+        MovieGridAdapter adapter = new MovieGridAdapter(getActivity(), movies);
+        adapter.setOnItemClickListener(new RecyclerViewOnItemClickListener() {
+            @Override
+            public void onItemClicked(View view, int position) {
+                Movie movie = dataList.get(position);
+                Intent movieDetailActivity = new Intent(getActivity(), MovieDetailActivity.class);
+                movieDetailActivity.putExtra(MovieDetailActivity.EXTRA_MOVIE, movie);
+                startActivity(movieDetailActivity);
+            }
+        });
         lstMovie.setAdapter(adapter);
 
         lstMovie.setVisibility(View.VISIBLE);

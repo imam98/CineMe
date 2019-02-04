@@ -15,8 +15,10 @@ import com.bumptech.glide.request.RequestOptions;
 import com.imam.cineme.R;
 import com.imam.cineme.model.Movie;
 import com.imam.cineme.util.API;
+import com.imam.cineme.util.RecyclerViewOnItemClickListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,11 +28,16 @@ public class MovieGridAdapter extends RecyclerView.Adapter<MovieGridAdapter.View
     private final int TYPE_MOVIE = 1;
     private Context context;
     private ArrayList<Movie> dataList;
+    private RecyclerViewOnItemClickListener itemClickListener = null;
 
     public MovieGridAdapter(Context context, ArrayList<Movie> dataList) {
         this.context = context;
         this.dataList = dataList;
         notifyDataSetChanged();
+    }
+
+    public void setOnItemClickListener(RecyclerViewOnItemClickListener listener) {
+        itemClickListener = listener;
     }
 
     @NonNull
@@ -67,7 +74,7 @@ public class MovieGridAdapter extends RecyclerView.Adapter<MovieGridAdapter.View
         return TYPE_MOVIE;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.img_movie_poster) ImageView imgPoster;
         @BindView(R.id.lbl_movie_views) TextView lblViews;
         @BindView(R.id.lbl_movie_release) TextView lblReleaseDate;
@@ -75,6 +82,16 @@ public class MovieGridAdapter extends RecyclerView.Adapter<MovieGridAdapter.View
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+
+            if (itemClickListener != null && position != RecyclerView.NO_POSITION) {
+                itemClickListener.onItemClicked(view, position);
+            }
         }
     }
 }

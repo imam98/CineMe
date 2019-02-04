@@ -60,6 +60,7 @@ public class MovieListLoader extends AsyncTaskLoader<ArrayList<Movie>> {
 
                         Movie movie = new Movie();
                         movie.setId(currMovie.getInt("id"));
+                        movie.setTitle(currMovie.getString("title"));
                         movie.setReleaseDate(currMovie.getString("release_date"));
                         movie.setPosterPath(currMovie.getString("poster_path"));
                         movie.setRate(currMovie.getDouble("vote_average"));

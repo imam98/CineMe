@@ -13,4 +13,10 @@
     <string name="my_favorites">My Favorites</string>
     <string name="planned_to_watch">Planned To Watch</string>
     <string name="search_for_movie">Search for movie...</string>
+    <string name="lorem_ipsum">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam hendrerit tellus nibh, vitae iaculis justo accumsan id. Suspendisse lectus orci, ultrices a diam nec, gravida congue ligula. Vestibulum ut est ut est laoreet vestibulum. Nunc imperdiet, libero sit amet fermentum vulputate, enim urna vestibulum urna, quis maximus purus magna quis urna. In id augue et orci mattis suscipit. Sed eleifend enim a vulputate dictum. Morbi mauris turpis, hendrerit ut urna nec, accumsan pretium est. Duis ornare urna elit, id gravida dui malesuada non. Suspendisse posuere, leo ut mollis tincidunt, turpis erat pulvinar augue, a tincidunt ante lacus ut lectus. Curabitur sed erat est.
+    </string>
+    <string name="overview">Overview</string>
+    <string name="casts">Casts</string>
+    <string name="you_may_also_like">You May Also Like</string>
 </resources>

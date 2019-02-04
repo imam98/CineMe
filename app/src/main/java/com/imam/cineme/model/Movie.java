@@ -2,19 +2,17 @@ package com.imam.cineme.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
-
-import com.imam.cineme.util.API;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.SyncHttpClient;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
-import cz.msebera.android.httpclient.Header;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class Movie implements Parcelable {
     private int id;
@@ -23,20 +21,18 @@ public class Movie implements Parcelable {
     private String posterPath;
     private String backdropPath;
     private String director;
-    private ArrayList<Cast> casts;
-    private ArrayList<String> genres;
-    private String releaseDate;
+    private ArrayList<Cast> casts = new ArrayList<>();
+    private ArrayList<String> genres = new ArrayList<>();
+    private Calendar releaseDate = Calendar.getInstance();
     private int runtime;
     private double rate;
     private int popularity;
+    private ArrayList<Movie> recommendations = new ArrayList<>();
 
-    public void setMovieDetails(JSONObject jsonResponse) throws JSONException {
-        title = jsonResponse.getString("title");
+    public void parseDetail(JSONObject jsonResponse) throws JSONException, ParseException {
         overview = jsonResponse.getString("overview");
         backdropPath = jsonResponse.getString("backdrop_path");
-        releaseDate = jsonResponse.getString("release_date");
         runtime = jsonResponse.getInt("runtime");
-        rate = jsonResponse.getDouble("vote_average");
         popularity = (int)jsonResponse.getDouble("popularity");
 
         JSONArray genreList = jsonResponse.getJSONArray("genres");
@@ -44,49 +40,41 @@ public class Movie implements Parcelable {
             genres.add(genreList.getJSONObject(i).getString("name"));
         }
 
-        String url = API.MOVIE_BASE_URL + id + "/credits" + API.API_KEY;
-        SyncHttpClient client = new SyncHttpClient();
-        client.get(url, new AsyncHttpResponseHandler() {
-            @Override
-            public void onStart() {
-                super.onStart();
-                setUseSynchronousMode(true);
+        JSONObject credits = jsonResponse.getJSONObject("credits");
+        JSONArray castList = credits.getJSONArray("cast");
+        for (int i = 0; i < 5; i++) {
+            JSONObject currCast = castList.getJSONObject(i);
+            Cast cast = new Cast();
+            cast.setId(currCast.getInt("id"));
+            cast.setName(currCast.getString("name"));
+            cast.setCharacter(currCast.getString("character"));
+            cast.setProfilePath(currCast.getString("profile_path"));
+            casts.add(cast);
+        }
+
+        JSONArray crewList = credits.getJSONArray("crew");
+        for (int i = 0; i < crewList.length(); i++) {
+            JSONObject currCrew = crewList.getJSONObject(i);
+            if (currCrew.getString("job").equals("Director")) {
+                director = currCrew.getString("name");
+                break;
             }
+        }
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                try {
-                    String responseStr = new String(responseBody);
-                    JSONObject responseObj = new JSONObject(responseStr);
-                    JSONArray castList = responseObj.getJSONArray("cast");
-                    for (int i = 0; i < castList.length(); i++) {
-                        JSONObject currCast = castList.getJSONObject(i);
-                        Cast cast = new Cast();
-                        cast.setId(currCast.getInt("id"));
-                        cast.setName(currCast.getString("name"));
-                        cast.setCharacter(currCast.getString("character"));
-                        cast.setProfilePath(currCast.getString("profile_path"));
-                        casts.add(cast);
-                    }
+        JSONArray recommendations = jsonResponse.getJSONObject("recommendations")
+                .getJSONArray("results");
+        for (int i = 0; i < 10; i++) {
+            JSONObject currMovie = recommendations.getJSONObject(i);
 
-                    JSONArray crewList = responseObj.getJSONArray("crew");
-                    for (int i = 0; i < crewList.length(); i++) {
-                        JSONObject currCrew = crewList.getJSONObject(i);
-                        if (currCrew.getString("job").equals("Director")) {
-                            director = currCrew.getString("name");
-                            break;
-                        }
-                    }
-                } catch (Exception e) {
-                    Log.e("CineMe", e.getMessage());
-                }
-            }
+            Movie movie = new Movie();
+            movie.setId(currMovie.getInt("id"));
+            movie.setTitle(currMovie.getString("title"));
+            movie.setPosterPath(currMovie.getString("poster_path"));
+            movie.setRate(currMovie.getDouble("vote_average"));
+            movie.setReleaseDate(currMovie.getString("release_date"));
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
-            }
-        });
+            this.recommendations.add(movie);
+        }
     }
 
     public int getId() {
@@ -154,11 +142,17 @@ public class Movie implements Parcelable {
     }
 
     public String getReleaseDate() {
-        return releaseDate;
+        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+        return formatter.format(releaseDate.getTime());
     }
 
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
+    public String getReleaseYear() {
+        return String.valueOf(releaseDate.get(Calendar.YEAR));
+    }
+
+    public void setReleaseDate(String formattedDate) throws ParseException {
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        releaseDate.setTime(formatter.parse(formattedDate));
     }
 
     public int getRuntime() {
@@ -185,6 +179,14 @@ public class Movie implements Parcelable {
         this.popularity = popularity;
     }
 
+    public ArrayList<Movie> getRecommendations() {
+        return recommendations;
+    }
+
+    public void setRecommendations(ArrayList<Movie> recommendations) {
+        this.recommendations = recommendations;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -200,10 +202,11 @@ public class Movie implements Parcelable {
         dest.writeString(this.director);
         dest.writeTypedList(this.casts);
         dest.writeStringList(this.genres);
-        dest.writeString(this.releaseDate);
+        dest.writeSerializable(this.releaseDate);
         dest.writeInt(this.runtime);
         dest.writeDouble(this.rate);
         dest.writeInt(this.popularity);
+        dest.writeTypedList(this.recommendations);
     }
 
     public Movie() {
@@ -218,13 +221,14 @@ public class Movie implements Parcelable {
         this.director = in.readString();
         this.casts = in.createTypedArrayList(Cast.CREATOR);
         this.genres = in.createStringArrayList();
-        this.releaseDate = in.readString();
+        this.releaseDate = (Calendar) in.readSerializable();
         this.runtime = in.readInt();
         this.rate = in.readDouble();
         this.popularity = in.readInt();
+        this.recommendations = in.createTypedArrayList(Movie.CREATOR);
     }
 
-    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
         @Override
         public Movie createFromParcel(Parcel source) {
             return new Movie(source);

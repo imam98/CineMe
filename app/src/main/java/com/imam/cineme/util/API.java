@@ -15,4 +15,5 @@ public class API {
     public static final String UPCOMING = "upcoming";
     public static final String POPULAR = "popular";
     public static final String QUERY = "&query=";
+    public static final String ADDITIONAL_DETAILS = "&append_to_response=credits,recommendations";
 }
