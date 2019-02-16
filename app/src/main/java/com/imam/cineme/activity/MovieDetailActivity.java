@@ -3,6 +3,7 @@ package com.imam.cineme.activity;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.imam.cineme.R;
 import com.imam.cineme.adapter.CastGridAdapter;
 import com.imam.cineme.adapter.MovieGridAdapter;
@@ -45,6 +47,8 @@ public class MovieDetailActivity extends AppCompatActivity
     @BindView(R.id.lbl_overview) TextView lblOverview;
     @BindView(R.id.lst_casts) RecyclerView lstCasts;
     @BindView(R.id.lst_recommendations) RecyclerView lstRecommendations;
+    @BindView(R.id.container_movie_detail) ConstraintLayout movieDetailContainer;
+    @BindView(R.id.shimmer_container) ShimmerFrameLayout shimmerContainer;
     public static final String EXTRA_MOVIE = "extra_movie";
     private boolean isHideToolbarView = false;
     private Movie movie;
@@ -92,6 +96,8 @@ public class MovieDetailActivity extends AppCompatActivity
 
     @Override
     public Loader<Movie> onCreateLoader(int i, Bundle bundle) {
+        movieDetailContainer.setVisibility(View.GONE);
+        shimmerContainer.setVisibility(View.VISIBLE);
         return new MovieDetailLoader(this, movie);
     }
 
@@ -141,6 +147,10 @@ public class MovieDetailActivity extends AppCompatActivity
             }
         });
         lstRecommendations.setAdapter(movieAdapter);
+
+        shimmerContainer.setVisibility(View.GONE);
+        shimmerContainer.stopShimmer();
+        movieDetailContainer.setVisibility(View.VISIBLE);
     }
 
     @Override
