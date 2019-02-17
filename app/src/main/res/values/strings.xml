@@ -19,4 +19,18 @@
     <string name="overview">Overview</string>
     <string name="casts">Casts</string>
     <string name="you_may_also_like">You May Also Like</string>
+    <string-array name="watch_now_quotes">
+        <item>For You To Watch</item>
+        <item>Watch Now Or Never</item>
+        <item>Wait No More</item>
+        <item>Get The Damn Ticket!</item>
+        <item>Anything To Watch</item>
+    </string-array>
+    <string-array name="upcoming_quotes">
+        <item>Don't Miss It!</item>
+        <item>Coming Soon</item>
+        <item>Wait For The Hype</item>
+        <item>It's Almost There</item>
+        <item>You May Need To Wait</item>
+    </string-array>
 </resources>
