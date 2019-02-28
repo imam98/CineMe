@@ -76,86 +76,15 @@
 
         </android.support.constraint.ConstraintLayout>
 
-        <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/shimmer_container"
+        <include
+            layout="@layout/shimmer_movie_grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="16dp"
-            app:shimmer_duration="700"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/search_box">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="1.0">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="270dp"
-                        android:layout_weight="0.5"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/img_poster_placeholder" />
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="270dp"
-                        android:layout_weight="0.5"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/img_poster_placeholder" />
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="1.0">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="270dp"
-                        android:layout_weight="0.5"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/img_poster_placeholder" />
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="270dp"
-                        android:layout_weight="0.5"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/img_poster_placeholder" />
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="1.0">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="270dp"
-                        android:layout_weight="0.5"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/img_poster_placeholder" />
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="270dp"
-                        android:layout_weight="0.5"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/img_poster_placeholder" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </com.facebook.shimmer.ShimmerFrameLayout>
+            app:layout_constraintTop_toBottomOf="@id/search_box" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/lst_movie"

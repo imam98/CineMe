@@ -4,6 +4,7 @@ import android.app.LoaderManager;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,6 +19,7 @@ import android.widget.FrameLayout;
 import com.imam.cineme.R;
 import com.imam.cineme.adapter.MovieGridAdapter;
 import com.imam.cineme.fragment.ExploreFragment;
+import com.imam.cineme.fragment.NowPlayingFragment;
 import com.imam.cineme.model.Movie;
 import com.imam.cineme.util.API;
 import com.imam.cineme.util.MovieListLoader;
@@ -29,6 +31,7 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    String title = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +50,9 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState == null) {
+            title = getResources().getString(R.string.explore);
             navigationView.setCheckedItem(R.id.nav_explore);
-            getSupportActionBar().setTitle(getResources().getString(R.string.explore));
+            getSupportActionBar().setTitle(title);
             ExploreFragment fragment = new ExploreFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.frm_container, fragment)
@@ -93,8 +97,21 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Fragment fragment = null;
+        if (id == R.id.nav_explore) {
+            title = getResources().getString(R.string.explore);
+            fragment = new ExploreFragment();
+        } else if (id == R.id.nav_now_playing) {
+            title = getResources().getString(R.string.now_playing);
+            fragment = new NowPlayingFragment();
+        }
 
-
+        if (fragment != null) {
+            getSupportActionBar().setTitle(title);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frm_container, fragment)
+                    .commit();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
