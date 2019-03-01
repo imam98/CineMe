@@ -27,10 +27,10 @@
         <item>Anything To Watch</item>
     </string-array>
     <string-array name="upcoming_quotes">
-        <item>Don't Miss It!</item>
+        <item>Don\'t Miss It!</item>
         <item>Coming Soon</item>
         <item>Wait For The Hype</item>
-        <item>It's Almost There</item>
+        <item>It\'s Almost There</item>
         <item>You May Need To Wait</item>
     </string-array>
 </resources>

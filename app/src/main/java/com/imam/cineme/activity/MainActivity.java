@@ -1,7 +1,5 @@
 package com.imam.cineme.activity;
 
-import android.app.LoaderManager;
-import android.content.Loader;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -9,25 +7,14 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import com.imam.cineme.R;
-import com.imam.cineme.adapter.MovieGridAdapter;
 import com.imam.cineme.fragment.ExploreFragment;
-import com.imam.cineme.fragment.NowPlayingFragment;
-import com.imam.cineme.model.Movie;
+import com.imam.cineme.fragment.MovieShowcaseFragment;
 import com.imam.cineme.util.API;
-import com.imam.cineme.util.MovieListLoader;
-
-import java.util.ArrayList;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -103,7 +90,10 @@ public class MainActivity extends AppCompatActivity
             fragment = new ExploreFragment();
         } else if (id == R.id.nav_now_playing) {
             title = getResources().getString(R.string.now_playing);
-            fragment = new NowPlayingFragment();
+            fragment = new MovieShowcaseFragment().setShowcaseState(API.NOW_PLAYING);
+        } else if (id == R.id.nav_coming_soon) {
+            title = getResources().getString(R.string.coming_soon);
+            fragment = new MovieShowcaseFragment().setShowcaseState(API.UPCOMING);
         }
 
         if (fragment != null) {
